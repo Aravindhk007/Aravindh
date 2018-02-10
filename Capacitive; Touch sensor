@@ -1,0 +1,36 @@
+#include <CapacitiveSensor.h>
+
+int led = 42;                                          //change '42' to any desired pin...long time = 0;
+int state = HIGH;
+int debounce = 200;
+
+boolean yes;
+boolean previous = false;
+
+// 10M resistor between pins 4 & 2, pin 2 is sensor pin, add a wire and or foil if desired
+CapacitiveSensor   cs_4_2 = CapacitiveSensor(4,2);{
+   cs_4_2.set_CS_AutocaL_Millis(0xFFFFFFFF);  //Calibrate the sensor... 
+   pinMode(led, OUTPUT);
+}
+
+voidloop(){
+    long total1 =  cs_4_2.capacitiveSensor(30);
+    
+    if (total1 > 60){yes = true;}
+    else {yes = false;}    
+    
+    if(yes == true && previous  == false && millis() - time>debounce){
+      
+       if(state == LOW)
+         state = HIGH;
+       else 
+         state = LOW;
+         time = millis();         
+    }
+       
+      digitalWrite(led, state);
+      previous = yes;
+
+      Serial.println(millis()-time);
+      delay(10);
+}
